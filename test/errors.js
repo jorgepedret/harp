@@ -115,6 +115,54 @@ describe("errors", function(){
     })
   })
 
+  describe("err-port-taken", function () {
+    var projectPath = path.join(__dirname, "apps/plain/root-style")
+    var outputPath  = path.join(__dirname, "out/plain/root-style")
+    var default_port = 9966
+    var expected_port = default_port + 1
+
+    before(function(done){
+      harp.server(projectPath, {}, function(){
+        done()
+      })
+    })
+
+    it("should not find next available port when port is explicit", function(done){
+      // 
+      // TODO: start server on port 9966 and it should
+      // error out saying that the port is not available
+      // 
+      // harp.server(projectPath, { port: default_port }, function(error, port){
+      //   should.exist(error)
+      //   done()
+      // })
+      done();
+    });
+
+    // do not find next if port is explicit
+    it("should find next available port", function(done){
+      done()
+    });
+
+    it("should find next available port", function(done){
+      harp.server(projectPath, {}, function(error, port){
+        should.not.exist(error)
+        should.exist(port)
+        port.should.eql(expected_port)
+        done()
+      })
+    })
+
+    it("should start server in port " + expected_port, function(done){
+      var agent = superagent.agent()
+      agent.get('http://localhost:' + expected_port + '/').end(function(err, rsp){
+        should.not.exist(err);
+        rsp.should.have.status(200);
+        done()
+      })
+    })
+  });
+
   after(function(done){
     exec("rm -rf " + path.join(__dirname, "out"), function(){
       done()

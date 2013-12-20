@@ -38,7 +38,6 @@ var output = function(msg){
   }
 }
 
-
 program
   .version(pkg.version)
 
@@ -89,7 +88,7 @@ program
   .action(function(path, program){
     var projectPath = nodePath.resolve(process.cwd(), path || "")
     var port        = program.port || 9000
-    harp.server(projectPath, { port: port }, function(){
+    harp.server(projectPath, {}, function(err, port){
       output("Your server is listening at http://localhost:" + port + "/")
     })
   })
